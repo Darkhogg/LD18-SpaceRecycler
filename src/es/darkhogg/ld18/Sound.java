@@ -1,7 +1,13 @@
 package es.darkhogg.ld18;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -16,11 +22,35 @@ public enum Sound {
     DEATH("/es/darkhogg/snd/death.wav"), GRAB("/es/darkhogg/snd/grab.wav"), RELEASE("/es/darkhogg/snd/release.wav"),
     HURT("/es/darkhogg/snd/hurt.wav");
 
-    private final URL url;
+    private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool(new ThreadFactory() {
+        @Override
+        public Thread newThread (Runnable task) {
+            Thread t = new Thread(task);
+            t.setDaemon(true);
+            t.setName("sound-thread-" + t.hashCode());
+            return t;
+        }
+    });
+
+    private final byte[] data;
 
     private Sound (URL url) {
-        System.out.printf("Loading Sound.%s from '%s'", this, url);
-        this.url = url;
+        System.out.printf("Loading Sound.%s from '%s'...%n", this, url);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (InputStream in = url.openStream()) {
+            // Copy input to output
+            byte[] buf = new byte[4096];
+            int r;
+            while ((r = in.read(buf)) != -1) {
+                out.write(buf, 0, r);
+            }
+
+        } catch (IOException exc) {
+            exc.printStackTrace();
+        } finally {
+            data = out.toByteArray();
+        }
     }
 
     private Sound (String str) {
@@ -31,7 +61,7 @@ public enum Sound {
         @Override
         public void run () {
             try {
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(url);
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(new ByteArrayInputStream(data));
                 AudioFormat audioFormat = audioInput.getFormat();
                 DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
 
@@ -71,8 +101,6 @@ public enum Sound {
     }
 
     public void play () {
-        Thread sndPlayer = new Thread(new SoundPlayer());
-        sndPlayer.setDaemon(true);
-        sndPlayer.start();
+        EXECUTOR.submit(new SoundPlayer());
     }
 }

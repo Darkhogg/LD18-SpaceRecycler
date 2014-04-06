@@ -80,6 +80,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         for (int s = 0; s < 100; s++) {
             stars.add(new Star(this));
         }
+        
+        // Trigger sound loading
+        Sound.GRAB.toString();
 
         while (!requestStop) {
             synchronized (this) {
