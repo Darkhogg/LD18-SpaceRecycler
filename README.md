@@ -1,4 +1,4 @@
-Space Rectcler
+Space Recycler
 ==============
 
 Space Recycler is a game originally created for [Ludum Dare 18][ld18]. The game
