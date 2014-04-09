@@ -40,7 +40,7 @@
     <jar destfile="${file.jar}" basedir="${dir.build}">
       <manifest>
         <attribute name="Main-Class" value="${class.main}" />
-        <attribute name="Permissions" value="sandbox" />
+        <attribute name="Permissions" value="all-permissions" />
       </manifest>
     </jar>
 
