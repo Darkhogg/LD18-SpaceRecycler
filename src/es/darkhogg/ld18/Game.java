@@ -40,7 +40,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     private final int[] intmod = { 10, -20, -100 };
     private final int[] intmin = { 60, 120, 900 };
 
-    private volatile boolean keyRight, keyLeft, keyUp, keyShoot, keyKill, keyRelease, keyAttract;
+    private volatile boolean keyRight, keyLeft, keyUp, keyShoot, keyKill, keyRelease, keyAttract, keyScreenshot;
+    private long screenshotTicks;
 
     public Player player;
     public Collection<Enemy> enemies = new HashSet<Enemy>();
@@ -499,6 +500,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
                 }
             }
         }
+        
+        // Screenshot
+        if (keyScreenshot) {
+            screenshotTicks++;
+        } else {
+            screenshotTicks = 0;
+        }
     }
 
     private void display () {
@@ -514,6 +522,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         bg.drawImage(inner, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, 0, 0, WIDTH, HEIGHT, null);
 
         bs.show();
+        
+        if (screenshotTicks == 1) {
+            ScreenshotHelper.saveScreenshot(inner);
+        }
     }
 
     private void miniDisplay (Graphics2D g) {
@@ -738,6 +750,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             case KeyEvent.VK_X:
                 keyAttract = true;
                 break;
+            case KeyEvent.VK_F12:
+                keyScreenshot = true;
+                break;
         }
     }
 
@@ -764,6 +779,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
                 break;
             case KeyEvent.VK_X:
                 keyAttract = false;
+                break;
+            case KeyEvent.VK_F12:
+                keyScreenshot = false;
                 break;
         }
     }
