@@ -31,7 +31,7 @@ debris or have much weight already attracted.
 Building/Running the Game
 -------------------------
 
-In the [releases](releases) page you can find pre-compiled versions of the game
+In the [releases](../../releases) page you can find pre-compiled versions of the game
 in JAR format. In most systems you should be able to double-click the file to
 run it if you have Java installed. If you have problems, the Internet is full of
 advice on how to execute a runnable JAR.
