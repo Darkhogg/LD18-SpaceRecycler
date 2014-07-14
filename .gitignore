@@ -1,5 +1,9 @@
 *.jar
 *.zip
+
 build/
 dest/
 bin/
+
+.classpath
+.project
