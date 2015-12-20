@@ -19,8 +19,8 @@ debris or have much weight already attracted.
 
 | Key | Action |
 |----:|:-------|
-| `←` | Turns the sip counter-clockwise
-| `→` | Turns the sip clockwise
+| `←` | Turns the ship counter-clockwise
+| `→` | Turns the ship clockwise
 | `↑` | Advances the ship
 | `V` | Shoots some weak energy
 | `C` | Propels your attracted matter forward
